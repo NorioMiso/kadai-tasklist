@@ -1,9 +1,8 @@
 package controllers;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
-import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Task;
-import utils.DBUtil;
 
 /**
  * Servlet implementation class NewServlet
@@ -31,21 +29,11 @@ public class NewServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EntityManager em = DBUtil.createEntityManager();
-        em.getTransaction().begin();
+        request.setAttribute("_token", request.getSession().getId());
+        request.setAttribute("task", new Task());
 
-        Task task = new Task();
-        task.setContent("homework");
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        task.setCreated_at(currentTime);
-        task.setUpdated_at(currentTime);
-
-        em.persist(task);
-        em.getTransaction().commit();
-
-        response.getWriter().append(Integer.valueOf(task.getId()).toString());
-
-        em.close();
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/new.jsp");
+        rd.forward(request, response);
     }
 
 }
