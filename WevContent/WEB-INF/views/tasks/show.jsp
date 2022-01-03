@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:import url="../layout/app.jsp">
     <c:param name="content">
-        <h2>id : ${task.id}のタスク詳細ページ</h2>
+        <h2>id : ${task.id} のタスク詳細ページ</h2>
 
         <p>タスク : <c:out value="${task.content}" /></p>
         <p>作成日時 : <fmt:formatDate value="${task.created_at}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
