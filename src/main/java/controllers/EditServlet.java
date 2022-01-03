@@ -31,14 +31,21 @@ public class EditServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EntityManager em = DBUtil.createEntityManager();
-        Task task = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
-        em.close();
+        Task task;
+        try {
+            EntityManager em = DBUtil.createEntityManager();
+            task = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
+            em.close();
+        } catch (NumberFormatException e) {
+            task = null;
+        }
 
         request.setAttribute("task", task);
         request.setAttribute("_token", request.getSession().getId());
 
-        request.getSession().setAttribute("task_id", task.getId());
+        if(task != null) {
+            request.getSession().setAttribute("task_id", task.getId());
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/edit.jsp");
         rd.forward(request, response);

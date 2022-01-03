@@ -31,9 +31,14 @@ public class ShowServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EntityManager em = DBUtil.createEntityManager();
-        Task task = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
-        em.close();
+        Task task;
+        try {
+            EntityManager em = DBUtil.createEntityManager();
+            task = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
+            em.close();
+        } catch (NumberFormatException e) {
+            task = null;
+        }
 
         request.setAttribute("task", task);
 
