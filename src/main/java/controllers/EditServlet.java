@@ -31,13 +31,13 @@ public class EditServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Task task;
+        Task task = null;
         try {
             EntityManager em = DBUtil.createEntityManager();
             task = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
             em.close();
         } catch (NumberFormatException e) {
-            task = null;
+
         }
 
         request.setAttribute("task", task);
